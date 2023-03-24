@@ -7,7 +7,7 @@ namespace Pets.Domain.Validations
     {
         public ContractValidations<T> EmailIsOk(string email, string message, string propertyName)
         {
-            if (string.IsNullOrEmpty(email) || !Regex.IsMatch(email, @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$"))
+            if (string.IsNullOrEmpty(email) || !Regex.IsMatch(email, @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", RegexOptions.IgnoreCase))
             {
                 AddNotification(new Notification(message, propertyName));
             }

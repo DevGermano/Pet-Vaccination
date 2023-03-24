@@ -9,10 +9,13 @@ namespace Pets.Domain.Validations
         {
             if (document.DocumentType == Enums.EDocumentType.CPF)
             {
-                if (!IsCpf(document.DocumentNumber))
+                if (!NotIsCpf(document.DocumentNumber))
                 {
                     AddNotification(new Notification(message, propertyName + " CPF"));
                 }
+            }
+            if (document.DocumentType == Enums.EDocumentType.CNPJ)
+            {
                 if (!IsCnpj(document.DocumentNumber))
                 {
                     AddNotification(new Notification(message, propertyName + " CNPJ"));
@@ -66,8 +69,13 @@ namespace Pets.Domain.Validations
             return cnpj.EndsWith(digito);
         }
 
-        private bool IsCpf(string cpf)
+        private bool NotIsCpf(string cpf)
         {
+            if (cpf.Length != 11)
+            {
+                return false;
+            }
+
             int[] multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
             int[] multiplicador2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
             string tempCpf;
@@ -77,10 +85,6 @@ namespace Pets.Domain.Validations
 
             cpf = cpf.Trim();
             cpf = cpf.Replace(".", "").Replace("-", "");
-
-            if (cpf.Length != 11)
-                return false;
-
             tempCpf = cpf.Substring(0, 9);
             soma = 0;
 
@@ -110,6 +114,7 @@ namespace Pets.Domain.Validations
             digito = digito + resto.ToString();
 
             return cpf.EndsWith(digito);
+
         }
     }
 }
